@@ -28,6 +28,7 @@
     "@tanstack/solid-query-devtools": "^5.17.10",
     "astro": "^4.1.2",
     "date-fns": "^2.30.0",
+    "nats.ws": "^1.19.1",
     "solid-js": "^1.8.7",
     "solid-transition-group": "^0.2.3",
     "tailwindcss": "^3.4.1"
