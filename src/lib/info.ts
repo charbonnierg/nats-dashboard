@@ -69,6 +69,7 @@ async function fetchData<T>(
   return response.json();
 }
 
+/** Encode options to be sent as NATS message payload. */
 function encodeOptions(args: any): Uint8Array {
   if (!args) {
     return js.encode({})
@@ -102,7 +103,7 @@ function encodeOptions(args: any): Uint8Array {
   return js.encode(jsonArgs)
 }
 
-
+/** Fetch the server data using NATS request/reply. */
 async function requestData<T>(
   nc: NatsConnection,
   serverId: string,
