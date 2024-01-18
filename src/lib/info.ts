@@ -69,6 +69,39 @@ async function fetchData<T>(
   return response.json();
 }
 
+function encodeOptions(args: any): Uint8Array {
+  if (!args) {
+    return js.encode({})
+  }
+  const jsonArgs = {}
+  for (const [key, value] of Object.entries(args)) {
+    switch (key) {
+      case "state":
+        switch (value) {
+          case "open":
+            jsonArgs[key] = 0
+            break
+          case "closed":
+            jsonArgs[key] = 1
+            break
+          case "any":
+            jsonArgs[key] = 2
+            break
+          default:
+            throw new Error(`Invalid state option: ${value}`)
+        }
+        break
+      case "consumers":
+        jsonArgs["consumer"] = value
+        break
+      default:
+        jsonArgs[key] = value
+        break
+    }
+  }
+  return js.encode(jsonArgs)
+}
+
 
 async function requestData<T>(
   nc: NatsConnection,
@@ -77,29 +110,7 @@ async function requestData<T>(
   args: any,
 ): Promise<T> {
   const ep = `$SYS.REQ.SERVER.${serverId.toUpperCase()}.${endpoint.toUpperCase()}`
-  const jsonArgs = {}
-  for (const [key, value] of Object.entries(args)) {
-    if (key == "state") {
-      switch (value) {
-        case "open":
-          jsonArgs[key] = 0
-          break
-        case "closed":
-          jsonArgs[key] = 1
-          break
-        case "any":
-          jsonArgs[key] = 2
-          break
-      }
-      throw("invalid state option")
-    }
-    if (key == "consumers") {
-      jsonArgs["consumer"] = value
-      continue
-    }
-    jsonArgs[key] = value
-  }
-  const payload = js.encode(jsonArgs)
+  const payload = encodeOptions(args)
   const reply = await nc.request(ep, payload, { timeout: 1000 })
   if (reply.data == null) {
     return {} as T
