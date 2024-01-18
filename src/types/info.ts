@@ -1,29 +1,29 @@
-import type { Varz } from './varz';
-import type { Connz, ConnzOptions } from './connz';
-import type { Routez, RoutezOptions } from './routez';
-import type { Gatewayz, GatewayzOptions } from './gatewayz';
-import type { Leafz, LeafzOptions } from './leafz';
-import type { Subsz, SubszOptions } from './subsz';
-import type { Accountz, AccountzOptions } from './accountz';
-import type { AccountStatz, AccountStatzOptions } from './accstatz';
-import type { Jsz, JszOptions } from './jsz';
-import type { Healthz, HealthzOptions } from './healthz';
+import type { Varz } from "./varz";
+import type { Connz, ConnzOptions } from "./connz";
+import type { Routez, RoutezOptions } from "./routez";
+import type { Gatewayz, GatewayzOptions } from "./gatewayz";
+import type { Leafz, LeafzOptions } from "./leafz";
+import type { Subsz, SubszOptions } from "./subsz";
+import type { Accountz, AccountzOptions } from "./accountz";
+import type { AccountStatz, AccountStatzOptions } from "./accstatz";
+import type { Jsz, JszOptions } from "./jsz";
+import type { Healthz, HealthzOptions } from "./healthz";
 
 /** NATS server monitoring endpoint. */
 export type Endpoint =
-  | 'varz' // General information.
-  | 'connz' // Connection information.
-  | 'routez' // Route information.
-  | 'gatewayz' // Gateway information.
-  | 'leafz' // Leaf node information.
-  | 'subsz' // Subscription routing information.
-  | 'accountz' // Account information.
-  | 'accstatz' // Account statistics.
-  | 'jsz' // JetStream information.
-  | 'healthz'; // Server health.
+  | "varz" // General information.
+  | "connz" // Connection information.
+  | "routez" // Route information.
+  | "gatewayz" // Gateway information.
+  | "leafz" // Leaf node information.
+  | "subsz" // Subscription routing information.
+  | "accountz" // Account information.
+  | "accstatz" // Account statistics.
+  | "jsz" // JetStream information.
+  | "healthz"; // Server health.
 
 /** Endpoints that return the server date in their responses. */
-export type EndpointWithDate = Exclude<Endpoint, 'healthz'>;
+export type EndpointWithDate = Exclude<Endpoint, "healthz">;
 
 /** NATS server monitoring endpoint options. */
 export type EndpointOptions = {
