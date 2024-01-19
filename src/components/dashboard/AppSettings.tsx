@@ -7,7 +7,7 @@ import {
 import Select, { type Options } from "~/components/Select";
 import Toggle from "~/components/Toggle";
 import { useStore } from "../context/store";
-import { usePingz } from "./queries";
+import { usePingStatz } from "./queries";
 
 const intervalOptions: Options<number> = [
   { value: 100, label: "100ms" },
@@ -25,7 +25,7 @@ const intervalOptions: Options<number> = [
 export default function AppSettings() {
   const [settings, actions] = useSettings();
   const [store, storeActions] = useStore();
-  const discoveredServers = usePingz();
+  const discoveredServers = usePingStatz();
   const readFile = (evt: any): void => {
     var files = evt.currentTarget.files;
     var file = files[0];
@@ -55,8 +55,8 @@ export default function AppSettings() {
           <SettingSection title="Server">
             <Select
               options={discoveredServers.data.map((srv) => ({
-                value: srv.id,
-                label: srv.name,
+                value: srv.server.id,
+                label: srv.server.name,
                 disabled: false,
               }))}
               value={store.serverId}

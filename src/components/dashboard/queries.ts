@@ -2,7 +2,7 @@ import { createMemo } from "solid-js";
 import { createQuery, useQueryClient } from "@tanstack/solid-query";
 
 import type { ConnzOptions, JszOptions } from "~/types";
-import { discoverServers, fetchInfo } from "~/lib/info";
+import { fetchInfo, requestManyData as requestInfos } from "~/lib/info";
 import { getPrevQueryResponse, newestQueryData } from "~/lib/query-utils";
 import {
   formatVarz,
@@ -28,7 +28,7 @@ export function useVarz() {
       const current = await fetchInfo({
         url: store.url,
         nc: store.connection,
-        serverID: store.serverId,
+        serverId: store.serverId,
         endpoint: "varz",
         jsonp: settings.jsonp,
         signal,
@@ -69,7 +69,7 @@ export function useConnz(options?: () => ConnzOptions) {
       const current = await fetchInfo({
         url: store.url,
         nc: store.connection,
-        serverID: store.serverId,
+        serverId: store.serverId,
         endpoint: "connz",
         args: optsMemo(),
         jsonp: settings.jsonp,
@@ -123,7 +123,7 @@ export function useJsz(options?: () => JszOptions) {
       const current = await fetchInfo({
         url: store.url,
         nc: store.connection,
-        serverID: store.serverId,
+        serverId: store.serverId,
         endpoint: "jsz",
         args: optsMemo(),
         jsonp: settings.jsonp,
@@ -159,25 +159,25 @@ export function useJsz(options?: () => JszOptions) {
 export type JszQuery = ReturnType<typeof useJsz>;
 
 /** Start polling for general server information. */
-export function usePingz() {
+export function usePingStatz() {
   const [store] = useStore();
   const [settings] = useSettings();
 
   return createQuery(() => ({
-    queryKey: [store.url, "pingz"],
+    queryKey: [store.url, "statz"],
     queryFn: async () => {
       if (!store.connection) {
         throw new Error("No NATS connection");
       }
-      return await discoverServers(store.connection);
+      return await requestInfos(store.connection, "statz", {});
     },
     enabled: store.active,
     refetchInterval: settings.interval,
     reconcile: false,
     meta: {
-      errorTitle: "Server IDs",
-      errorMessage: "Cannot fetch the server IDs.",
+      errorTitle: "Server discovery",
+      errorMessage: "Cannot fetch the server stats.",
     },
   }));
 }
-export type PingQuery = ReturnType<typeof usePingz>;
+export type PingStatzQuery = ReturnType<typeof usePingStatz>;
